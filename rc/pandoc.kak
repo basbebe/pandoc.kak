@@ -46,9 +46,15 @@ pandoc-kill-preview %{
 }
 
 define-command -docstring "convert current buffer with pandoc" \
-pandoc-convert -params 1 %{
+pandoc-convert -params ..2 %{
     evaluate-commands %sh{
-        pandoc ${kak_buffile} ${kak_opt_pandoc_commands} -o ${1}
+        if [ -z "$1" ]
+            then
+            outputfile="$(echo ${kak_buffile} | cut -f 1 -d '.').pdf"
+        else
+            outputfile="${1}"
+        fi
+        pandoc ${kak_buffile} ${kak_opt_pandoc_commands} ${2} -o ${outputfile}
     }
 }
 
