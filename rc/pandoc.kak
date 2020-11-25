@@ -8,18 +8,26 @@ pandoc-preview-enable %{
         prevfile="$(echo ${kak_buffile} | cut -f 1 -d '.')_pandoc_prev.pdf"
         printf "%s\n" "set-option buffer pandoc_preview_file ${prevfile}"
     }
+
     pandoc-convert %opt{pandoc_preview_file}
-    evaluate-commands %sh{
-        { zathura ${kak_opt_pandoc_preview_file} & } </dev/null >/dev/null 2>&1
-        printf "%s\n" "set-option buffer pandoc_preview_pid ${!}"
-    }
+    pandoc-preview-show
 
     hook -group pandoc buffer BufWritePost .* %{
-        pandoc-convert %opt{pandoc_preview_file} 
+        pandoc-convert %opt{pandoc_preview_file}
+        pandoc-preview-show
     }
 
     hook -group pandoc buffer BufClose .* %{
         pandoc-kill-preview 
+    }
+}
+
+define-command -hidden \
+pandoc-preview-show %{
+    evaluate-commands %sh{
+        kill -0 ${kak_opt_pandoc_preview_pid} || \
+        ( { zathura ${kak_opt_pandoc_preview_file} & } </dev/null >/dev/null 2>&1 ; \
+        printf "%s\n" "set-option buffer pandoc_preview_pid ${!}" )
     }
 }
 
