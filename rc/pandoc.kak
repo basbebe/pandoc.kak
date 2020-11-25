@@ -29,6 +29,14 @@ pandoc-preview-disable %{
     pandoc-kill-preview
 }
 
+define-command -hidden \
+pandoc-kill-preview %{
+    evaluate-commands %sh{
+        kill $kak_opt_pandoc_preview_pid
+        rm ${kak_opt_pandoc_preview_file}
+    }
+}
+
 define-command -docstring "convert current buffer with pandoc" \
 pandoc-convert -params 1 %{
     evaluate-commands %sh{
@@ -39,11 +47,4 @@ pandoc-convert -params 1 %{
 define-command -docstring "beautify pandoc markdown" \
 pandoc-beautify %{
     exec -draft '%<|>pandoc -f markdown -t markdown -s<ret>'
-}
-
-define-command -hidden pandoc-kill-preview %{
-    evaluate-commands %sh{
-        kill $kak_opt_pandoc_preview_pid
-        rm ${kak_opt_pandoc_preview_file}
-    }
 }
