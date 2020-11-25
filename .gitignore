@@ -1,0 +1,4 @@
+# .gitignore
+
+# MAC stuff
+.DS_Store
