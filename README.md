@@ -33,7 +33,7 @@ Then reload Kakoune config or restart Kakoune and run `:plug-install`.
 pandoc uses `pandoc-options` to let you specify custom pandoc options for the current buffer (or globally). Those options will **always** be applied.  
 Example for an entry in `kakrc`/:
 ```
-set-option global pandoc_commands "-d default"
+set-option global pandoc_options "-d default"
 ```
 
 ## Contributing
