@@ -28,7 +28,7 @@ Then reload Kakoune config or restart Kakoune and run `:plug-install`.
 **pandoc.kak** provides the following commands:
 
 * `pandoc` – Converts the current document with the pandoc options given as arguments. If no arguments are given, a pdf file will be produced.
-* `pandoc-preview` – Creates a temporary pdf file next to the current buffer and opens it with zathura. Every time the document is saved, the preview is being updated. Takes pandoc options as aarguments.
+* `pandoc-preview` – Creates a temporary pdf file next to the current buffer and opens it with zathura. Every time the document is saved, the preview is being updated. Takes pandoc options as arguments.
 * `pandoc-beautify` – Beautifies the current buffer using Pandoc. Assumes buffer is markdown text.
 
 pandoc uses `pandoc-options` to let you specify custom pandoc options for the current buffer (or globally). Those options will **always** be applied.  
