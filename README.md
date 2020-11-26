@@ -27,12 +27,11 @@ Then reload Kakoune config or restart Kakoune and run `:plug-install`.
 
 **pandoc.kak** provides the following commands:
 
-* `pandoc-preview-enable` - Creates a temporary pdf file next to the current buffer and opens it with zathura. Every time the document is saved, the preview is being updated.
-* `pandoc-preview-disable` - Closes the preview and removes the remporary pdf.
-* `pandoc-convert` - Converts the current document to the file given as argument.
+* `pandoc-preview` - Creates a temporary pdf file next to the current buffer and opens it with zathura. Every time the document is saved, the preview is being updated. Takes pandoc options as aarguments.
+* `pandoc` - Converts the current document with the pandoc options given as arguments. If no arguments are given, a pdf file will be produced.
 
-pandoc uses `pandoc-commands` to let you specify custom pandoc arguments for the current buffer (or globally).  
-Example for an entry in `kakrc`:
+pandoc uses `pandoc-options` to let you specify custom pandoc options for the current buffer (or globally). Those options will **always** be applied.  
+Example for an entry in `kakrc`/:
 ```
 set-option global pandoc_commands "-d default"
 ```

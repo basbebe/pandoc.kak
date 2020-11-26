@@ -1,20 +1,23 @@
-declare-option -docstring "set Pandoc default file" str pandoc_commands ""
+declare-option -docstring "set Pandoc default file" str pandoc_options ""
 declare-option -hidden str pandoc_preview_file ""
 declare-option -hidden str pandoc_preview_pid ""
 
 define-command -docstring "activate Pandoc Preview window" \
-pandoc-preview-enable %{
+pandoc-preview %{
     evaluate-commands %sh{
         prevfile="${kak_buffile%.*}_pandoc_prev.pdf"
         printf "%s\n" "set-option buffer pandoc_preview_file ${prevfile}"
     }
 
-    pandoc-convert %opt{pandoc_preview_file}
+    pandoc -o %opt{pandoc_preview_file}
     pandoc-preview-show
 
     hook -group pandoc buffer BufWritePost .* %{
-        pandoc-convert %opt{pandoc_preview_file}
-        pandoc-preview-show
+        evaluate-commands %sh{
+            kill -0 ${kak_opt_pandoc_preview_pid} && \
+            printf "%s\n" "pandoc -o %opt{pandoc_preview_file}" || \
+            printf "%s\n" "pandoc-preview-disable"
+        }
     }
 
     hook -group pandoc buffer BufClose .* %{
@@ -31,10 +34,12 @@ pandoc-preview-show %{
     }
 }
 
-define-command -docstring "deactivate Pandoc Preview window" \
+define-command -hidden \
 pandoc-preview-disable %{
     remove-hooks buffer pandoc
     pandoc-kill-preview
+    unset-option buffer pandoc_preview_file
+    unset-option buffer pandoc_preview_pid
 }
 
 define-command -hidden \
@@ -46,15 +51,15 @@ pandoc-kill-preview %{
 }
 
 define-command -docstring "convert current buffer with pandoc" \
-pandoc-convert -params ..2 %{
+pandoc -params .. %{
     evaluate-commands %sh{
         if [ -z "$1" ]
             then
-            outputfile="${kak_buffile%.*}.pdf"
+            options="-o ${kak_buffile%.*}.pdf"
         else
-            outputfile="${1}"
+            options="${@}"
         fi
-        pandoc ${kak_buffile} ${kak_opt_pandoc_commands} ${2} -o ${outputfile}
+        pandoc ${kak_buffile} ${kak_opt_pandoc_options} ${options}
     }
 }
 
