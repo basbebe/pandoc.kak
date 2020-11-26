@@ -1,8 +1,9 @@
-declare-option -docstring "set Pandoc default file" str pandoc_options
+declare-option -docstring "set default Pandoc options" str pandoc_options
 declare-option -hidden str pandoc_preview_file
 declare-option -hidden str pandoc_preview_pid
 
-define-command -docstring "activate Pandoc Preview window" \
+define-command -docstring "activate Pandoc pdf Preview window
+(uses <pandoc_options>)" \
 pandoc-preview %{
     evaluate-commands %sh{
         prevfile="${kak_buffile%.*}_pandoc_prev.pdf"
@@ -51,7 +52,13 @@ pandoc-kill-preview %{
     }
 }
 
-define-command -docstring "convert current buffer with pandoc" \
+define-command -docstring "pandoc [<options>]: convert current file with pandoc
+if no options are given, outputs current file as pdf
+
+Example:
+    pandoc -d defaultfile.yaml -o page.html
+    
+(uses <pandoc_options>" \
 pandoc -params .. %{
     evaluate-commands %sh{
         if [ -z "$1" ]
@@ -64,7 +71,8 @@ pandoc -params .. %{
     }
 }
 
-define-command -docstring "beautify pandoc markdown" \
+define-command -docstring "beautify current buffer using pandoc
+assumes markdown input" \
 pandoc-beautify %{
     exec -draft '%<|>pandoc -f markdown -t markdown -s<ret>'
 }
