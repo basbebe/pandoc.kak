@@ -5,7 +5,7 @@ declare-option -hidden str pandoc_preview_pid ""
 define-command -docstring "activate Pandoc Preview window" \
 pandoc-preview-enable %{
     evaluate-commands %sh{
-        prevfile="$(echo ${kak_buffile} | cut -f 1 -d '.')_pandoc_prev.pdf"
+        prevfile="${kak_buffile%.*}_pandoc_prev.pdf"
         printf "%s\n" "set-option buffer pandoc_preview_file ${prevfile}"
     }
 
@@ -50,7 +50,7 @@ pandoc-convert -params ..2 %{
     evaluate-commands %sh{
         if [ -z "$1" ]
             then
-            outputfile="$(echo ${kak_buffile} | cut -f 1 -d '.').pdf"
+            outputfile="${kak_buffile%.*}.pdf"
         else
             outputfile="${1}"
         fi
