@@ -41,3 +41,6 @@ set-option global pandoc_options "-d default"
 
 This is very much a work in progress and by no means a bug-free, fully functioning plugin with all features imaginable.
 Contributions of any kind are welcome and appreciated.
+
+
+Inspired by [vim-pandoc](https://github.com/vim-pandoc/vim-pandoc)
