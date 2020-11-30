@@ -74,5 +74,5 @@ pandoc -params .. %{
 define-command -docstring "beautify current buffer using pandoc
 assumes markdown input" \
 pandoc-beautify %{
-    exec -draft '%<|>pandoc -f markdown -t markdown -s<ret>'
+    exec -draft '%<|>pandoc -f markdown -t markdown -s -Vheader-includes=""<ret>'
 }
