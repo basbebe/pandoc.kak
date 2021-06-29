@@ -2,7 +2,26 @@ declare-option -docstring "set default Pandoc options" str pandoc_options
 declare-option -hidden str pandoc_preview_file
 declare-option -hidden int pandoc_preview_pid
 
-provide-module pandoc %{
+hook global WinSetOption filetype=markdown %(
+    require-module pandoc
+
+    # Highlighters
+    # add latex and html highlighters
+    require-module latex
+
+    hook window InsertChar \n -group latex-indent %{ latex-indent-newline }
+    hook window InsertChar \} -group latex-indent %{ latex-indent-closing-brace }
+    hook window ModeChange pop:insert:.* -group latex-indent %{ latex-trim-indent }
+    hook -once -always window WinSetOption filetype=.* %{ remove-hooks latex-indent }
+    hook window InsertChar \n -group latex-insert latex-insert-on-new-line
+
+    add-highlighter window/latex ref latex
+    hook -once -always window WinSetOption filetype=.* %{ remove-highlighter window/latex }
+
+    # require-module html
+)
+
+provide-module pandoc %~
     # convert with  pandoc
     define-command -docstring "pandoc [options]: convert current buffer file
     with pandoc if no options are given, outputs current file as pdf
@@ -90,4 +109,4 @@ provide-module pandoc %{
     pandoc-beautify %{
         exec -draft '%<|>pandoc -f markdown -t markdown -s -Vheader-includes=""<ret>'
     }
-}
+~

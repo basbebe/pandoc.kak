@@ -9,25 +9,16 @@ HTML and other formats.
 **pandoc.kak** provides a way to preview markdown documents as pdf using
 [zathura].
 
-**pandoc.kak** does **not** provide additional syntax highlighting for
-pandoc markdown at this time.
+**pandoc.kak** provides syntax highlighting for latex at this point (experimental).
 
 ## Installation
 
 Add `pandoc.kak` to the plugin manager of your choise, put it into your
 autoload or source it manually.
 
-### Using [alexherbo2/plug.kak]
-
-``` kak
-plug pandoc https://github.com/basbebe/pandoc.kak %{
-    # your config
-}
-```
-
 Then reload Kakoune config or restart Kakoune and run `:plug-install`.
 
-### Using [robertmeta/plug.kak]
+### Using [andreyorst/plug.kak]
 
 ``` kak
 plug "basbebe/pandoc.kak" %{
@@ -40,7 +31,9 @@ Then reload Kakoune config or restart Kakoune and run `:plug-install`.
 ### Otherwise
 
 ``` kak
-require-module modeline-extras
+hook global WinSetOption filetype=(asciidoc|fountain|html|latex|markdown) %{
+    require-module pandoc
+}
 ```
 
 ## Usage
@@ -67,11 +60,10 @@ set-option global pandoc_options "-d default"
 
 ### Example config
 
-Using `alexherbo2/plug.kak`:
-
 ``` kak
-plug pandoc https://github.com/basbebe/pandoc.kak %{
-    set-option global pandoc_options "-d default --reference-links"
+hook global WinSetOption filetype=(asciidoc|fountain|html|latex|markdown) %{
+    require-module pandoc
+    set-option global pandoc_options '-d default'
 }
 ```
 
@@ -96,8 +88,7 @@ Inspired by [vim-pandoc]
   [kakoune]: https://kakoune.org/
   [Pandoc's markdown variant]: https://pandoc.org/MANUAL.html#pandocs-markdown
   [zathura]: https://pwmt.org/projects/zathura/
-  [alexherbo2/plug.kak]: https://github.com/alexherbo2/plug.kak
-  [robertmeta/plug.kak]: https://github.com/robertmeta/plug.kak
+  [andreyorst/plug.kak]: https://github.com/andreyorst/plug.kak
   [kakoune-livedown]: https://github.com/Delapouite/kakoune-livedown
   [The Unlicense]: https://choosealicense.com/licenses/unlicense/
   [vim-pandoc]: https://github.com/vim-pandoc/vim-pandoc
